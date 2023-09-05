@@ -1,11 +1,19 @@
 package bookstore
 
+import "errors"
+
 type Book struct {
-	Title string
+	Title  string
 	Author string
 	Copies int
 }
 
-func main() {
-	
+func Buy(book Book) (Book, error) {
+	if book.Copies < 1 {
+		return book, errors.New("there are no copies left")
+	}
+
+	book.Copies--
+
+	return book, nil
 }
