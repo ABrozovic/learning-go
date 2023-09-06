@@ -7,6 +7,11 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
+var catalog = []bookstore.Book{
+	{Title: "For the love of Go", ID: 0},
+	{Title: "The power of Go:Tools", ID: 1},
+}
+
 func TestBook(t *testing.T) {
 	t.Parallel()
 
@@ -60,15 +65,23 @@ func TestOutOfStock(t *testing.T) {
 func TestGetAllBooks(t *testing.T) {
 	t.Parallel()
 
-	catalog := []bookstore.Book{
-		{Title: "For the love of Go"},
-		{Title: "The power of Go:Tools"},
-	}
-
 	want := catalog
 	got := bookstore.GetAllBooks(catalog)
 
 	if !cmp.Equal(want, got) {
 		t.Error(cmp.Diff(want, got))
+	}
+}
+
+func TestGetBook(t *testing.T) {
+	want := catalog[1]
+	got, err := bookstore.GetBook(catalog, 1)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !cmp.Equal(want, got) {
+		t.Errorf(cmp.Diff(want, got))
 	}
 }
