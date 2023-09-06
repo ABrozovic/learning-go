@@ -5,16 +5,16 @@ import "errors"
 type Book struct {
 	Title           string
 	Author          string
+	category        string
 	Copies          int
 	ID              int
 	PriceCents      int
 	DiscountPercent int
-	category        string
 }
 
 type Catalog map[int]Book
 
-func Buy(book Book) (Book, error) {
+func Buy(book *Book) (*Book, error) {
 	if book.Copies < 1 {
 		return book, errors.New("there are no copies left")
 	}
@@ -42,11 +42,11 @@ func GetBook(catalog map[int]Book, id int) (Book, error) {
 	return b, nil
 }
 
-func PriceCents(b Book) int {
+func PriceCents(b *Book) int {
 	return b.PriceCents - (b.PriceCents * b.DiscountPercent / 100)
 }
 
-func (b Book) NetPriceCents() int {
+func (b *Book) NetPriceCents() int {
 	totalDiscount := (b.PriceCents * b.DiscountPercent / 100)
 	return b.PriceCents - totalDiscount
 }

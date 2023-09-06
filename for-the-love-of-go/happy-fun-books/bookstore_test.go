@@ -34,7 +34,7 @@ func TestBuyBook(t *testing.T) {
 
 	want := 1
 
-	result, err := bookstore.Buy(b)
+	result, err := bookstore.Buy(&b)
 
 	if err != nil {
 		t.Fatal(err)
@@ -56,7 +56,7 @@ func TestOutOfStock(t *testing.T) {
 		Copies: 0,
 	}
 
-	_, err := bookstore.Buy(b)
+	_, err := bookstore.Buy(&b)
 
 	if err == nil {
 		t.Errorf("expected an out of stock error")
