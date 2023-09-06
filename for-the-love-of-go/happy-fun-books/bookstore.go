@@ -3,11 +3,15 @@ package bookstore
 import "errors"
 
 type Book struct {
-	Title  string
-	Author string
-	Copies int
-	ID     int
+	Title           string
+	Author          string
+	Copies          int
+	ID              int
+	PriceCents      int
+	DiscountPercent int
 }
+
+type Catalog map[int]Book
 
 func Buy(book Book) (Book, error) {
 	if book.Copies < 1 {
@@ -19,8 +23,13 @@ func Buy(book Book) (Book, error) {
 	return book, nil
 }
 
-func GetAllBooks(catalog map[int]Book) map[int]Book {
-	return catalog
+func (c Catalog) GetAllBooks() []Book {
+	books := []Book{}
+	for _, b := range c {
+		books = append(books, b)
+	}
+
+	return books
 }
 
 func GetBook(catalog map[int]Book, id int) (Book, error) {
@@ -30,4 +39,13 @@ func GetBook(catalog map[int]Book, id int) (Book, error) {
 	}
 
 	return b, nil
+}
+
+func PriceCents(b Book) int {
+	return b.PriceCents - (b.PriceCents * b.DiscountPercent / 100)
+}
+
+func (b Book) NetPriceCents() int {
+	totalDiscount := (b.PriceCents * b.DiscountPercent / 100)
+	return b.PriceCents - totalDiscount
 }
