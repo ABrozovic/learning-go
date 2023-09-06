@@ -150,8 +150,8 @@ func TestSetCategory(t *testing.T) {
 		Title: "Spark Joy",
 	}
 
-	want := "Autobiography"
-	err := b.SetCategory(want)
+	want := bookstore.CategoryAutobiography
+	err := b.SetCategory(bookstore.CategoryAutobiography)
 	got := b.Category()
 
 	if err != nil {
@@ -170,7 +170,7 @@ func TestInvalidSetCategory(t *testing.T) {
 		Title: "Spark Joy",
 	}
 
-	err := b.SetCategory("Western")
+	err := b.SetCategory(999)
 
 	if err == nil {
 		t.Fatalf("want error for invalid category")

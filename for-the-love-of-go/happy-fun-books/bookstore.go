@@ -2,10 +2,26 @@ package bookstore
 
 import "errors"
 
+type Category int
+
+const (
+	CategoryAutobiography Category = iota
+	CategoryLargePrintRomance
+	CategoryParticlePhysics
+	CategorySciFi
+)
+
+var isValidCategory = map[Category]bool{
+	CategoryAutobiography:     true,
+	CategoryLargePrintRomance: true,
+	CategoryParticlePhysics:   true,
+	CategorySciFi:             true,
+}
+
 type Book struct {
 	Title           string
 	Author          string
-	category        string
+	category        Category
 	Copies          int
 	ID              int
 	PriceCents      int
@@ -61,8 +77,8 @@ func (b *Book) SetPriceCents(price int) error {
 	return nil
 }
 
-func (b *Book) SetCategory(cat string) error {
-	if cat != "Autobiography" {
+func (b *Book) SetCategory(cat Category) error {
+	if !isValidCategory[cat] {
 		return errors.New("there is no such category")
 	}
 
@@ -71,6 +87,6 @@ func (b *Book) SetCategory(cat string) error {
 	return nil
 }
 
-func (b *Book) Category() string {
+func (b *Book) Category() Category {
 	return b.category
 }

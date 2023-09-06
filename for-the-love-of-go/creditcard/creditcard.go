@@ -2,18 +2,18 @@ package creditcard
 
 import "errors"
 
-type card struct {
+type Card struct {
 	number string
 }
 
-func New(num string) (card, error) {
+func New(num string) (Card, error) {
 	if len(num) < 1 {
-		return card{}, errors.New("credit card number can't be empty")
+		return Card{}, errors.New("credit card number can't be empty")
 	}
 
-	return card{number: num}, nil
+	return Card{number: num}, nil
 }
 
-func (c *card) Number() string {
+func (c *Card) Number() string {
 	return c.number
 }
