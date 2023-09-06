@@ -2,9 +2,26 @@ package bookstore
 
 import "errors"
 
+type Category int
+
+const (
+	CategoryAutobiography Category = iota
+	CategoryLargePrintRomance
+	CategoryParticlePhysics
+	CategorySciFi
+)
+
+var isValidCategory = map[Category]bool{
+	CategoryAutobiography:     true,
+	CategoryLargePrintRomance: true,
+	CategoryParticlePhysics:   true,
+	CategorySciFi:             true,
+}
+
 type Book struct {
 	Title           string
 	Author          string
+	category        Category
 	Copies          int
 	ID              int
 	PriceCents      int
@@ -13,7 +30,7 @@ type Book struct {
 
 type Catalog map[int]Book
 
-func Buy(book Book) (Book, error) {
+func Buy(book *Book) (*Book, error) {
 	if book.Copies < 1 {
 		return book, errors.New("there are no copies left")
 	}
@@ -41,11 +58,35 @@ func GetBook(catalog map[int]Book, id int) (Book, error) {
 	return b, nil
 }
 
-func PriceCents(b Book) int {
+func PriceCents(b *Book) int {
 	return b.PriceCents - (b.PriceCents * b.DiscountPercent / 100)
 }
 
-func (b Book) NetPriceCents() int {
+func (b *Book) NetPriceCents() int {
 	totalDiscount := (b.PriceCents * b.DiscountPercent / 100)
 	return b.PriceCents - totalDiscount
+}
+
+func (b *Book) SetPriceCents(price int) error {
+	if price < 1 {
+		return errors.New("the price can't be 0 or lower")
+	}
+
+	b.PriceCents = price
+
+	return nil
+}
+
+func (b *Book) SetCategory(cat Category) error {
+	if !isValidCategory[cat] {
+		return errors.New("there is no such category")
+	}
+
+	b.category = cat
+
+	return nil
+}
+
+func (b *Book) Category() Category {
+	return b.category
 }

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
 var catalog = bookstore.Catalog{
@@ -33,7 +34,7 @@ func TestBuyBook(t *testing.T) {
 
 	want := 1
 
-	result, err := bookstore.Buy(b)
+	result, err := bookstore.Buy(&b)
 
 	if err != nil {
 		t.Fatal(err)
@@ -55,7 +56,7 @@ func TestOutOfStock(t *testing.T) {
 		Copies: 0,
 	}
 
-	_, err := bookstore.Buy(b)
+	_, err := bookstore.Buy(&b)
 
 	if err == nil {
 		t.Errorf("expected an out of stock error")
@@ -71,7 +72,7 @@ func TestGetAllBooks(t *testing.T) {
 	}
 	got := catalog.GetAllBooks()
 
-	if !cmp.Equal(want, got) {
+	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(bookstore.Book{})) {
 		t.Error(cmp.Diff(want, got))
 	}
 }
@@ -86,7 +87,7 @@ func TestGetBook(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if !cmp.Equal(want, got) {
+	if !cmp.Equal(want, got, cmpopts.IgnoreUnexported(bookstore.Book{})) {
 		t.Errorf(cmp.Diff(want, got))
 	}
 }
@@ -105,5 +106,73 @@ func TestNetPriceCents(t *testing.T) {
 
 	if want != got {
 		t.Errorf("want %d, got %d", want, got)
+	}
+}
+
+func TestSetPriceCents(t *testing.T) {
+	t.Parallel()
+
+	want := 200
+
+	b := bookstore.Book{
+		Title: "Spark Joy",
+	}
+	err := b.SetPriceCents(200)
+	got := b.PriceCents
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if want != got {
+		t.Fatalf("want %d, got %d", want, got)
+	}
+}
+
+func TestInvalidPrice(t *testing.T) {
+	t.Parallel()
+
+	b := bookstore.Book{
+		Title: "Spark Joy",
+	}
+
+	err := b.SetPriceCents(0)
+
+	if err == nil {
+		t.Fatal("want error for setting price to zero or lower")
+	}
+}
+
+func TestSetCategory(t *testing.T) {
+	t.Parallel()
+
+	b := bookstore.Book{
+		Title: "Spark Joy",
+	}
+
+	want := bookstore.CategoryAutobiography
+	err := b.SetCategory(bookstore.CategoryAutobiography)
+	got := b.Category()
+
+	if err != nil {
+		t.Fatal("invalid category")
+	}
+
+	if want != got {
+		t.Fatalf("want %q, got %q", want, got)
+	}
+}
+
+func TestInvalidSetCategory(t *testing.T) {
+	t.Parallel()
+
+	b := bookstore.Book{
+		Title: "Spark Joy",
+	}
+
+	err := b.SetCategory(999)
+
+	if err == nil {
+		t.Fatalf("want error for invalid category")
 	}
 }
