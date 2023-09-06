@@ -19,16 +19,15 @@ func Buy(book Book) (Book, error) {
 	return book, nil
 }
 
-func GetAllBooks(catalog []Book) []Book {
+func GetAllBooks(catalog map[int]Book) map[int]Book {
 	return catalog
 }
 
-func GetBook(catalog []Book, id int) (Book, error) {
-	for _, b := range catalog {
-		if b.ID == id {
-			return b, nil
-		}
+func GetBook(catalog map[int]Book, id int) (Book, error) {
+	b, ok := catalog[id]
+	if !ok {
+		return Book{}, errors.New("no book found")
 	}
 
-	return Book{}, errors.New("no book found")
+	return b, nil
 }
