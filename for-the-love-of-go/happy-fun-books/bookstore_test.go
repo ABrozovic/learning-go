@@ -7,9 +7,9 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-var catalog = []bookstore.Book{
-	{Title: "For the love of Go", ID: 0},
-	{Title: "The power of Go:Tools", ID: 1},
+var catalog = map[int]bookstore.Book{
+	0: {ID: 0, Title: "For the love of Go"},
+	1: {ID: 1, Title: "The power of Go:Tools"},
 }
 
 func TestBook(t *testing.T) {
