@@ -1,6 +1,9 @@
 package playground
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
 
 type MyString string
 
@@ -30,4 +33,14 @@ func (s MyString) ToUpper() string {
 
 func (i *MyInt) Double() {
 	*i *= 2
+}
+
+func Withdraw(amount int) (int, error) {
+	balance := 1000
+
+	if balance >= amount {
+		return balance - amount, nil
+	}
+
+	return 0, errors.New("not enough funds")
 }

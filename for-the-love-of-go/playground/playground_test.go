@@ -106,3 +106,23 @@ func TestDouble(t *testing.T) {
 		t.Errorf("want %q, got %q", want, got)
 	}
 }
+
+func TestWithdraw(t *testing.T) {
+	t.Parallel()
+
+	_, err := playground.Withdraw(200)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestInvalidWithdraw(t *testing.T) {
+	t.Parallel()
+
+	_, err := playground.Withdraw(1001)
+
+	if err == nil {
+		t.Fatal("want error for invalid withdrawal, got nil")
+	}
+}
