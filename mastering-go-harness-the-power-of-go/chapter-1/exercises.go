@@ -16,21 +16,21 @@ func Which(arguments ...string) error {
 		return errors.New("please proveide an argument")
 	}
 
-	file := arguments[1]
+	files := arguments[1:]
 	pathValue := os.Getenv("PATH")
 	pathSplit := filepath.SplitList(pathValue)
 
 	for _, directory := range pathSplit {
-		fullPath := filepath.Join(directory, file)
+		for _, file := range files {
+			fullPath := filepath.Join(directory, file)
+			fileInfo, err := os.Stat(fullPath)
 
-		fileInfo, err := os.Stat(fullPath)
-
-		if err == nil {
-			mode := fileInfo.Mode()
-
-			if mode.IsRegular() {
-				if mode&0o111 != 0 {
-					fmt.Println(fullPath)
+			if err == nil {
+				mode := fileInfo.Mode()
+				if mode.IsRegular() {
+					if mode&0o111 != 0 {
+						fmt.Println(fullPath)
+					}
 				}
 			}
 		}
