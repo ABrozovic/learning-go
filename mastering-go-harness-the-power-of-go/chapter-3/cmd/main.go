@@ -115,6 +115,12 @@ func main() {
 			record, ok := mapRecords[args[0]]
 
 			if ok {
+				mapRecords[args[0]] = exercises.Record{
+					Name:       mapRecords[args[0]].Name,
+					Surname:    mapRecords[args[0]].Surname,
+					Tel:        mapRecords[args[0]].Tel,
+					LastAccess: strconv.FormatInt(time.Now().Unix(), 10)}
+
 				fmt.Println(record)
 			} else {
 				fmt.Println("Record not found")
