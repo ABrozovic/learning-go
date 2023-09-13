@@ -79,3 +79,37 @@ func RandomFloat64(min, max float64) float64 {
 func (c Circle) Perimeter() float64 {
 	return 2 * math.Pi * c.R
 }
+
+type MyStruct interface {
+	GetOrder() int
+}
+
+type MyStructs []MyStruct
+
+type ShouldOrder struct {
+	Order int
+}
+
+type ShouldDifferentiate struct {
+	Diff bool
+}
+
+func (m MyStructs) Len() int {
+	return len(m)
+}
+
+func (m MyStructs) Less(i, j int) bool {
+	return m[i].GetOrder() < m[j].GetOrder()
+}
+
+func (m MyStructs) Swap(i, j int) {
+	m[i], m[j] = m[j], m[i]
+}
+
+func (s ShouldOrder) GetOrder() int {
+	return s.Order
+}
+
+func (s ShouldDifferentiate) GetOrder() int {
+	return 1
+}

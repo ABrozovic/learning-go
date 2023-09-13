@@ -7,8 +7,33 @@ import (
 )
 
 func main() {
-	Shape3D()
+	CustomSort()
 }
+
+func CustomSort() {
+	dataSet := make(exercises.MyStructs, 5)
+
+	for i := 0; i < 5; i++ {
+		if i%2 == 0 {
+			dataSet[i] = exercises.ShouldOrder{Order: i}
+		} else {
+			dataSet[i] = exercises.ShouldDifferentiate{Diff: false}
+		}
+	}
+
+	for i, data := range dataSet {
+		switch data.(type) {
+		case exercises.ShouldDifferentiate:
+			fmt.Println(i, "should differentiate")
+		case exercises.ShouldOrder:
+			fmt.Println(i, "should Order")
+		}
+	}
+
+	sort.Sort(sort.Reverse(dataSet))
+	fmt.Println(dataSet)
+}
+
 func Shape3D() {
 	data := exercises.Shapes3D{}
 
