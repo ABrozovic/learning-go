@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"strings"
 )
 
 type Record struct {
@@ -87,4 +88,32 @@ func SaveCSVFile(csvPath string, data []Record) error {
 	csvWriter.Flush()
 
 	return nil
+}
+
+func MapToSlice(aMap map[int]string) (keys []int, values []string) {
+	keySlice := []int{}
+	valueSlice := []string{}
+
+	for key, value := range aMap {
+		keySlice = append(keySlice, key)
+		valueSlice = append(valueSlice, value)
+	}
+
+	return keySlice, valueSlice
+}
+
+type ArgStructure struct {
+	Parameter string
+	Index     int
+}
+
+func ArgToStruct(arg string) *[]ArgStructure {
+	args := strings.Fields(arg)
+	structure := make([]ArgStructure, len(args))
+
+	for i, value := range args {
+		structure[i] = ArgStructure{Index: i + 1, Parameter: value}
+	}
+
+	return &structure
 }
