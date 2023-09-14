@@ -1,6 +1,8 @@
 package exercises
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func AddFloat(message string, numbers ...float64) float64 {
 	fmt.Println(message)
